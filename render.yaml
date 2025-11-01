@@ -5,7 +5,7 @@ services:
     env: python
     plan: free
     rootDir: backend
-    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
@@ -27,8 +27,10 @@ services:
         value: http://localhost:11434
       - key: FRONTEND_URL
         value: https://godsaeng-frontend.onrender.com
-      - key: PYTHON_VERSION
-        value: "3.9.18"
+          - key: PYTHON_VERSION
+            value: "3.9.18"
+          - key: PYTHON_RUNTIME_VERSION
+            value: "3.9.18"
 
   # 프론트엔드 서비스
   - type: static_site
