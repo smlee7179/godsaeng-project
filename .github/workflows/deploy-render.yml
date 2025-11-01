@@ -1,0 +1,71 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+      
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: Build frontend
+        working-directory: ./frontend
+        env:
+          VITE_API_BASE_URL: https://godsaeng-backend.onrender.com
+        run: npm run build
+      
+      - name: Verify frontend build
+        run: |
+          if [ -d "frontend/dist" ]; then
+            echo "✅ Frontend build successful"
+            ls -la frontend/dist/
+          else
+            echo "❌ Frontend build failed"
+            exit 1
+          fi
+      
+      - name: Test backend imports
+        working-directory: ./backend
+        run: |
+          python3 -m pip install -q -r requirements.txt
+          python3 -c "from main import app; print('✅ Backend imports successful')"
+      
+      - name: Deployment status
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ 배포 준비 완료"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Render는 GitHub 푸시를 감지하여 자동으로 배포합니다."
+          echo ""
+          echo "백엔드 서비스: https://godsaeng-backend.onrender.com"
+          echo "프론트엔드 서비스: https://godsaeng-frontend.onrender.com"
+          echo ""
+          echo "프론트엔드 서비스가 없다면 Render 대시보드에서 수동 생성:"
+          echo "  - New → Static Site"
+          echo "  - render.yaml 설정 사용"
+
