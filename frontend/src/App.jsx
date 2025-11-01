@@ -9,6 +9,7 @@ import Logs from './pages/Logs'
 import LogDetail from './pages/LogDetail'
 import CreateLog from './pages/CreateLog'
 import AIReports from './pages/AIReports'
+import SystemStatus from './pages/SystemStatus'
 import Layout from './components/Layout'
 import './App.css'
 
@@ -68,6 +69,10 @@ function App() {
                 </Layout>
               </PrivateRoute>
             }
+          />
+          <Route
+            path="/status"
+            element={<SystemStatus />}
           />
         </Routes>
       </Router>

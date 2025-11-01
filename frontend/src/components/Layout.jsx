@@ -39,6 +39,12 @@ const Layout = ({ children }) => {
               >
                 AI 분석
               </Link>
+              <Link
+                to="/status"
+                className={location.pathname === '/status' ? 'nav-link active' : 'nav-link'}
+              >
+                시스템 상태
+              </Link>
             </nav>
             <div className="user-menu">
               <span className="user-name">{user?.name}</span>
