@@ -39,8 +39,10 @@ async def init_db():
 
 async def close_db():
     """데이터베이스 연결 종료"""
+    global client
     if client:
         client.close()
+        client = None
 
 def get_database():
     """데이터베이스 인스턴스 반환"""
