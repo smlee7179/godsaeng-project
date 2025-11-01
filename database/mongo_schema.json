@@ -1,0 +1,7 @@
+{
+  "collections": {
+    "users": {"fields": ["id", "name", "email", "created_at"]},
+    "daily_logs": {"fields": ["user_id", "activity", "photo_url", "timestamp"]},
+    "ai_reports": {"fields": ["user_id", "date", "summary", "feedback"]}
+  }
+}

@@ -1,0 +1,42 @@
+services:
+  # 백엔드 서비스
+  - type: web
+    name: godsaeng-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGODB_URL
+        sync: false
+      - key: DATABASE_NAME
+        value: godsaeng
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: AI_PROVIDER
+        value: huggingface
+      - key: HUGGINGFACE_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OLLAMA_URL
+        value: http://localhost:11434
+      - key: PYTHON_VERSION
+        value: 3.9.18
+
+  # 프론트엔드 서비스
+  - type: web
+    name: godsaeng-frontend
+    env: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: godsaeng-backend
+          property: host
+

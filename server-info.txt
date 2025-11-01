@@ -1,0 +1,26 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GODSAENG 서버 실행 정보
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 서버 상태: 실행 중
+
+📝 로컬 접속:
+   🌐 Frontend:  http://localhost:5173
+   🔌 Backend:   http://localhost:8000
+   📚 API Docs:  http://localhost:8000/docs
+
+📡 서버 관리:
+   백엔드 PID: $(cat .backend.pid 2>/dev/null || echo "N/A")
+   프론트엔드 PID: $(cat .frontend.pid 2>/dev/null || echo "N/A")
+   
+   서버 중지: kill $(cat .backend.pid 2>/dev/null) $(cat .frontend.pid 2>/dev/null)
+   로그 확인: tail -f backend.log frontend.log
+
+🌐 인터넷 접속 (ngrok 필요):
+   1. ngrok 설치: brew install ngrok/ngrok/ngrok
+   2. 계정 생성: https://dashboard.ngrok.com/signup
+   3. 인증: ngrok config add-authtoken YOUR_TOKEN
+   4. 터널 생성: ngrok http 5173
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

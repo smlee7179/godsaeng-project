@@ -1,0 +1,37 @@
+.create-log {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.create-log h2 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.log-form {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-help {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .log-form {
+    padding: 20px;
+  }
+}
+

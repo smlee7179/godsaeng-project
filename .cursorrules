@@ -1,0 +1,15 @@
+{
+  "$schema": "https://cursor.sh/schemas/v1.json",
+  "rules": [
+    {
+      "name": "AI 개발 규칙",
+      "description": "Cursor AI는 이 규칙을 기반으로 코드를 작성하며, 모든 API/계정 정보는 설정 파일에서 불러온다.",
+      "scope": ["backend/", "frontend/", "database/"],
+      "instructions": [
+        "모든 외부 API 키, 계정 정보, 토큰은 backend/config/secrets.json 또는 .env 파일에서 불러온다.",
+        "필요한 키가 없으면 커서 AI는 개발자에게 추가 방법을 안내해야 한다.",
+        "FastAPI + React + MongoDB 구조를 유지하고 모든 주석은 한국어로 작성한다."
+      ]
+    }
+  ]
+}

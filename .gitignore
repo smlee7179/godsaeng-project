@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Database
+mongodb_data/
+*.db
+*.sqlite
+
+# PID files
+*.pid
+
+# Secrets
+secrets.json
+backend/config/secrets.json
+
+# Deployment
+.renderignore
+
+# Frontend build
+frontend/dist/
+frontend/build/
+
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/.pytest_cache/
