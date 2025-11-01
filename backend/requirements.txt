@@ -13,4 +13,4 @@ pydantic-settings==2.1.0
 # 선택사항: Google Gemini API 사용 시
 # google-generativeai==0.3.2
 
-email-validator>=2.0.0
+email-validator==2.1.1
