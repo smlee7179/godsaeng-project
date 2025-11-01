@@ -1,0 +1,34 @@
+{
+  "backend": {
+    "/": {
+      "status": 502,
+      "success": false
+    },
+    "/health": {
+      "status": 502,
+      "success": false
+    },
+    "/config": {
+      "status": 502,
+      "success": false
+    },
+    "/docs": {
+      "status": 502,
+      "success": false
+    },
+    "/api/auth/register": {
+      "status": 502,
+      "success": false
+    }
+  },
+  "frontend": {
+    "status": 404,
+    "content_type": "",
+    "content_length": 0,
+    "success": false
+  },
+  "integration": {
+    "api_call": false,
+    "success": false
+  }
+}
