@@ -5,14 +5,26 @@ AI 기반 라이프 트래킹 웹 앱
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
 
 from app.routers import auth, logs, ai_reports, users
 from app.database import init_db
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """애플리케이션 라이프사이클 관리"""
+    # 시작 시
+    await init_db()
+    yield
+    # 종료 시
+    from app.database import close_db
+    await close_db()
+
 app = FastAPI(
     title="GODSAENG API",
     description="AI 기반 라이프 트래킹 웹 앱 API",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS 설정
@@ -46,10 +58,25 @@ app.include_router(users.router, prefix="/api/users", tags=["사용자"])
 app.include_router(logs.router, prefix="/api/logs", tags=["라이프 기록"])
 app.include_router(ai_reports.router, prefix="/api/ai", tags=["AI 분석"])
 
-@app.on_event("startup")
-async def startup_event():
-    """애플리케이션 시작 시 데이터베이스 초기화"""
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """애플리케이션 라이프사이클 관리"""
+    # 시작 시
     await init_db()
+    yield
+    # 종료 시
+    from app.database import close_db
+    await close_db()
+
+# lifespan 등록
+app = FastAPI(
+    title="GODSAENG API",
+    description="AI 기반 라이프 트래킹 웹 앱 API",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
 @app.get("/")
 async def root():
