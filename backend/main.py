@@ -60,8 +60,40 @@ app.include_router(ai_reports.router, prefix="/api/ai", tags=["AI 분석"])
 
 @app.get("/")
 async def root():
-    """루트 엔드포인트"""
-    return {"message": "GODSAENG API 서버가 실행 중입니다."}
+    """루트 엔드포인트 - 헬스체크"""
+    return {
+        "message": "GODSAENG API 서버가 실행 중입니다.",
+        "status": "healthy",
+        "version": "1.0.0"
+    }
+
+@app.get("/health")
+async def health_check():
+    """헬스체크 엔드포인트"""
+    try:
+        from app.database import get_database
+        db = get_database()
+        if db:
+            # 간단한 데이터베이스 연결 확인
+            await db.command('ping')
+            return {
+                "status": "healthy",
+                "database": "connected",
+                "version": "1.0.0"
+            }
+        else:
+            return {
+                "status": "degraded",
+                "database": "not_connected",
+                "version": "1.0.0"
+            }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": "error",
+            "error": str(e),
+            "version": "1.0.0"
+        }
 
 @app.get("/config")
 async def get_config():
