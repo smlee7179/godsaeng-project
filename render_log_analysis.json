@@ -1,0 +1,46 @@
+{
+  "backend": {
+    "status": 502,
+    "headers": {
+      "Date": "Sat, 01 Nov 2025 10:42:14 GMT",
+      "Content-Type": "text/html; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Connection": "keep-alive",
+      "CF-RAY": "997ac8c62bbbaa86-ICN",
+      "rndr-id": "38777b24-7621-4438",
+      "x-render-routing": "no-deploy",
+      "cf-cache-status": "DYNAMIC",
+      "Server": "cloudflare",
+      "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "content_length": 223038,
+    "content_type": "text/html; charset=utf-8",
+    "server": "cloudflare",
+    "content_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>502</title>\n    <style>@font-face {\n  font-family: \"Roobert\";\n  font-weight: 500;\n  font-style: normal;\n  font-stretch: normal;\n  src: url(\"data:font/woff2;base64,d09GMk9UVE8AAKewAAwAAAABa6QAAKdfAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYKmehqCHhuC4UocpRQGYACLBgE2AiQDkygEBgWFRwcgW8pqkQKZcr0u0nk2H+gc25rBL5CqkDOqYXNqo87dNmL1mgByHi4yIGwcgLFJz2f/////f/pSkaHK"
+  },
+  "frontend": {
+    "status": 200,
+    "headers": {
+      "Date": "Sat, 01 Nov 2025 10:42:14 GMT",
+      "Content-Type": "text/html; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Connection": "keep-alive",
+      "Content-Encoding": "gzip",
+      "Cache-Control": "public, max-age=0, s-maxage=300",
+      "etag": "W/\"d16f7791da9dc6c0cac259bac37630e5\"",
+      "last-modified": "Sat, 01 Nov 2025 10:42:10 UTC",
+      "strict-transport-security": "max-age=315360000; includeSubdomains; preload",
+      "vary": "Accept-Encoding, Accept-Encoding",
+      "x-content-type-options": "nosniff",
+      "cf-cache-status": "DYNAMIC",
+      "Server": "cloudflare",
+      "CF-RAY": "997ac8c7ffbc018f-ICN",
+      "alt-svc": "h3=\":443\"; ma=86400"
+    },
+    "content_length": 488,
+    "content_type": "text/html; charset=utf-8",
+    "server": "cloudflare",
+    "content_preview": "<!doctype html>\n<html lang=\"ko\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/vite.svg\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>GODSAENG - AI 기반 라이프 트래킹</title>\n    <script type=\"module\" crossorigin src=\"/assets/index-BrwJw_9F.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"/assets/index-CClVUBo9.css\">\n  </head>\n  <body>\n    <div id=\"root\"></div>\n  </body>\n</html>\n\n"
+  },
+  "timestamp": "2025-11-01 19:42:14"
+}
