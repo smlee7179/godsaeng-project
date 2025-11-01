@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
+import os
 
 from app.routers import auth, logs, ai_reports, users
 from app.database import init_db
@@ -29,7 +30,6 @@ app = FastAPI(
 
 # CORS 설정
 # 개발 환경과 프로덕션 환경 모두 지원
-import os
 
 # Render 환경 변수에서 프론트엔드 URL 가져오기
 frontend_url = os.getenv("FRONTEND_URL", "https://godsaeng-frontend.onrender.com")
@@ -58,26 +58,6 @@ app.include_router(users.router, prefix="/api/users", tags=["사용자"])
 app.include_router(logs.router, prefix="/api/logs", tags=["라이프 기록"])
 app.include_router(ai_reports.router, prefix="/api/ai", tags=["AI 분석"])
 
-from contextlib import asynccontextmanager
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """애플리케이션 라이프사이클 관리"""
-    # 시작 시
-    await init_db()
-    yield
-    # 종료 시
-    from app.database import close_db
-    await close_db()
-
-# lifespan 등록
-app = FastAPI(
-    title="GODSAENG API",
-    description="AI 기반 라이프 트래킹 웹 앱 API",
-    version="1.0.0",
-    lifespan=lifespan
-)
-
 @app.get("/")
 async def root():
     """루트 엔드포인트"""
@@ -102,4 +82,3 @@ async def global_exception_handler(request, exc):
         status_code=500,
         content={"message": "서버 내부 오류가 발생했습니다.", "error": str(exc)}
     )
-
