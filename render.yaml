@@ -24,8 +24,10 @@ services:
         sync: false
       - key: OLLAMA_URL
         value: http://localhost:11434
+      - key: FRONTEND_URL
+        value: https://godsaeng-frontend.onrender.com
       - key: PYTHON_VERSION
-        value: 3.9.18
+        value: "3.9.18"
 
   # 프론트엔드 서비스
   - type: static_site
