@@ -43,8 +43,8 @@ gh repo create godsaeng-project --public --source=. --remote=origin --push
 
 3. **데이터베이스 사용자 생성**:
    - "Database Access" → "Add New Database User"
-   - Username: `godsaeng_user`
-   - Password: 강력한 비밀번호 생성 (저장!)
+   - Username: `godsaeng_user` smlee2257_db_user
+   - Password: 강력한 비밀번호 생성 (저장!) MJBdSMaeBvSKgcZy
    - Privileges: "Atlas admin"
    - "Add User" 클릭
 
