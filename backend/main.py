@@ -95,6 +95,64 @@ async def health_check():
             "version": "1.0.0"
         }
 
+@app.get("/status")
+async def system_status():
+    """시스템 상태 상세 확인 엔드포인트"""
+    import os
+    from datetime import datetime
+    
+    status_info = {
+        "timestamp": datetime.utcnow().isoformat(),
+        "version": "1.0.0",
+        "components": {}
+    }
+    
+    # 데이터베이스 상태 확인
+    try:
+        from app.database import get_database
+        db = get_database()
+        if db:
+            await db.command('ping')
+            # 데이터베이스 통계
+            db_stats = await db.command('dbStats')
+            status_info["components"]["database"] = {
+                "status": "connected",
+                "name": db.name,
+                "collections": len(await db.list_collection_names())
+            }
+        else:
+            status_info["components"]["database"] = {
+                "status": "not_connected",
+                "error": "Database client not initialized"
+            }
+    except Exception as e:
+        status_info["components"]["database"] = {
+            "status": "error",
+            "error": str(e)
+        }
+    
+    # 환경 변수 확인 (민감한 정보 제외)
+    env_vars = {
+        "MONGODB_URL": "설정됨" if os.getenv("MONGODB_URL") else "설정 안됨",
+        "DATABASE_NAME": os.getenv("DATABASE_NAME", "godsaeng"),
+        "AI_PROVIDER": os.getenv("AI_PROVIDER", "huggingface"),
+        "HUGGINGFACE_API_KEY": "설정됨" if os.getenv("HUGGINGFACE_API_KEY") else "설정 안됨",
+        "GEMINI_API_KEY": "설정됨" if os.getenv("GEMINI_API_KEY") else "설정 안됨",
+        "FRONTEND_URL": os.getenv("FRONTEND_URL", "설정 안됨"),
+    }
+    status_info["components"]["environment"] = env_vars
+    
+    # 전체 상태 결정
+    all_healthy = all(
+        comp.get("status") == "connected" or comp.get("status") == "healthy"
+        for comp in status_info["components"].values()
+        if isinstance(comp, dict) and "status" in comp
+    )
+    
+    status_info["overall_status"] = "healthy" if all_healthy else "degraded"
+    
+    return status_info
+
 @app.get("/config")
 async def get_config():
     """프론트엔드 설정 정보 반환"""
