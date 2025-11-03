@@ -25,50 +25,33 @@ async def init_db():
         # Render 환경에서 SSL 핸드셰이크 문제 해결을 위한 명시적 설정
         import ssl
         
-        # SSL 컨텍스트 생성 - 인증서 검증 우회 (개발 환경용)
-        # Python 버전 호환성을 위한 SSL 컨텍스트 생성
-        try:
-            # Python 3.7+ (PROTOCOL_TLS_CLIENT)
-            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        except AttributeError:
-            try:
-                # Python 3.6 (PROTOCOL_TLS)
-                ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-            except AttributeError:
-                # 이전 버전 (PROTOCOL_SSLv23)
-                ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        # PyMongo/Motor가 지원하는 SSL 파라미터 사용
+        # ssl_context는 지원하지 않으므로 ssl_cert_reqs 사용
         
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
-        
-        # mongodb+srv://는 이미 TLS를 사용하므로 추가 설정은 선택적
-        # 하지만 Render 환경에서는 SSL 컨텍스트를 명시적으로 전달해야 함
-        
-        # 연결 옵션 설정
-        client_options = {
-            "serverSelectionTimeoutMS": 30000,
-            "connectTimeoutMS": 20000,
-            "ssl_context": ssl_context,
-        }
+        # 연결 문자열에 TLS 옵션 추가 (이미 있으면 유지)
+        if "tlsAllowInvalidCertificates" not in mongodb_url:
+            separator = "&" if "?" in mongodb_url else "?"
+            mongodb_url = f"{mongodb_url}{separator}tlsAllowInvalidCertificates=true"
         
         # mongodb+srv:// 프로토콜을 사용하는 경우
-        # SSL 컨텍스트를 직접 전달하여 SSL 핸드셰이크 문제 해결
+        # PyMongo/Motor가 지원하는 SSL 파라미터 사용
         if mongodb_url.startswith("mongodb+srv://"):
             # mongodb+srv://는 기본적으로 TLS 사용
-            # SSL 컨텍스트를 명시적으로 전달
+            # ssl_cert_reqs를 CERT_NONE으로 설정하여 인증서 검증 우회
             client = AsyncIOMotorClient(
                 mongodb_url,
                 tls=True,
-                ssl_context=ssl_context,
+                tlsAllowInvalidCertificates=True,
                 serverSelectionTimeoutMS=30000,
                 connectTimeoutMS=20000
             )
         else:
             # mongodb:// 프로토콜 사용 시
+            # ssl_cert_reqs 파라미터 사용 (tls=False일 때)
             client = AsyncIOMotorClient(
                 mongodb_url,
                 tls=True,
-                ssl_context=ssl_context,
+                tlsAllowInvalidCertificates=True,
                 serverSelectionTimeoutMS=30000,
                 connectTimeoutMS=20000
             )
