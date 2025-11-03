@@ -21,40 +21,43 @@ async def init_db():
         raise ValueError("MONGODB_URL 환경 변수가 설정되지 않았습니다.")
     
     try:
-        # MongoDB Atlas SSL 연결 설정
-        # Render 환경에서 SSL 핸드셰이크 문제 해결을 위한 명시적 설정
-        import ssl
+        # MongoDB Atlas 연결 설정
+        # 순차적 해결 방법 적용
         
-        # PyMongo/Motor가 지원하는 SSL 파라미터 사용
-        # ssl_context는 지원하지 않으므로 ssl_cert_reqs 사용
+        # 방법 1: 최소 설정으로 시작 (가장 단순)
+        # mongodb+srv://는 기본적으로 TLS를 사용하므로 추가 설정 불필요
         
-        # 연결 문자열에 TLS 옵션 추가 (이미 있으면 유지)
-        if "tlsAllowInvalidCertificates" not in mongodb_url:
+        # 연결 문자열에 tlsAllowInvalidCertificates 추가 시도 (개발 환경용)
+        if "tlsAllowInvalidCertificates" not in mongodb_url and "mongodb+srv://" in mongodb_url:
             separator = "&" if "?" in mongodb_url else "?"
             mongodb_url = f"{mongodb_url}{separator}tlsAllowInvalidCertificates=true"
         
-        # mongodb+srv:// 프로토콜을 사용하는 경우
-        # PyMongo/Motor가 지원하는 SSL 파라미터 사용
-        if mongodb_url.startswith("mongodb+srv://"):
-            # mongodb+srv://는 기본적으로 TLS 사용
-            # ssl_cert_reqs를 CERT_NONE으로 설정하여 인증서 검증 우회
+        # 최소 설정으로 클라이언트 생성
+        # 타임아웃만 설정하고, SSL은 연결 문자열에 의존
+        try:
             client = AsyncIOMotorClient(
                 mongodb_url,
-                tls=True,
-                tlsAllowInvalidCertificates=True,
                 serverSelectionTimeoutMS=30000,
                 connectTimeoutMS=20000
             )
-        else:
-            # mongodb:// 프로토콜 사용 시
-            # ssl_cert_reqs 파라미터 사용 (tls=False일 때)
-            client = AsyncIOMotorClient(
-                mongodb_url,
-                tls=True,
-                tlsAllowInvalidCertificates=True,
-                serverSelectionTimeoutMS=30000,
-                connectTimeoutMS=20000
-            )
+        except Exception as e1:
+            # 첫 번째 시도 실패 시, tlsAllowInvalidCertificates 파라미터 추가
+            print(f"⚠️ 첫 번째 연결 시도 실패: {str(e1)[:200]}")
+            print("⚠️ tlsAllowInvalidCertificates 파라미터로 재시도...")
+            
+            try:
+                client = AsyncIOMotorClient(
+                    mongodb_url,
+                    tlsAllowInvalidCertificates=True,
+                    serverSelectionTimeoutMS=30000,
+                    connectTimeoutMS=20000
+                )
+            except Exception as e2:
+                # 두 번째 시도도 실패 시, 최소 설정으로 재시도
+                print(f"⚠️ 두 번째 연결 시도 실패: {str(e2)[:200]}")
+                print("⚠️ 최소 설정으로 재시도...")
+                
+                client = AsyncIOMotorClient(mongodb_url)
         db = client[settings.database_name]
         
         # 연결 테스트
